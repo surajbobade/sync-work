@@ -1,12 +1,23 @@
+import { useCallback } from 'react';
 import { useAuth } from '../../hooks/useAuth';
+import { logout } from '../../api/auth';
 
 export default function Home() {
-    const { user, logout } = useAuth();
+    const { user, logout: setLogoutState } = useAuth();
+
+    const logUserOut = useCallback(async () => {
+        try {
+            await logout();
+            setLogoutState();
+        } catch (err) {
+            console.log(err);
+        }
+    }, [setLogoutState]);
 
     return (
         <div>
             <h1>Welcome {user?.email}</h1>
-            <button onClick={logout}>Logout</button>
+            <button onClick={logUserOut}>Logout</button>
         </div>
     );
 }
