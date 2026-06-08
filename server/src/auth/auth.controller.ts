@@ -47,7 +47,6 @@ export class AuthController {
         @Req() req: Request,
         @Res({ passthrough: true }) res: Response,
     ) {
-        console.log({ cookiers: req.cookies })
         const refreshToken = req.cookies.refreshToken;
 
         const tokens = await this.authService.refresh(refreshToken);
@@ -69,7 +68,11 @@ export class AuthController {
     async logout(@Req() req, @Res({ passthrough: true }) res) {
         await this.authService.logout(req.user.userId);
 
-        res.clearCookie('refreshToken');
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+        });
 
         return {
             message: 'Logged out',

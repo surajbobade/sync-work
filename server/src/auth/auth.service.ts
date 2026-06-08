@@ -90,14 +90,12 @@ export class AuthService {
     }
 
     async refresh(refreshToken: string) {
-        console.log({refreshToken})
         const payload = await this.jwtService.verifyAsync(refreshToken, {
             secret: process.env.JWT_REFRESH_SECRET,
         });
-        console.log({payload})
-        const user = await this.usersService.findById(payload.sub);
 
-        if (!user || !user.hashedRefreshToken) {
+        const user = await this.usersService.findById(payload.sub);
+        if (!user?.hashedRefreshToken) {
             throw new UnauthorizedException();
         }
 
