@@ -32,7 +32,7 @@ export class AuthController {
         const tokens = await this.authService.login(data);
         res.cookie('refreshToken', tokens.refreshToken, {
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite: 'none',
             maxAge: REFRESH_TOKEN_AGE,
         });
@@ -54,6 +54,7 @@ export class AuthController {
 
         res.cookie('refreshToken', tokens.refreshToken, {
             httpOnly: true,
+            secure: true,
             sameSite: 'none',
             maxAge: REFRESH_TOKEN_AGE,
         });
